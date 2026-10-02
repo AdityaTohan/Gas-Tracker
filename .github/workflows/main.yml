@@ -3,6 +3,9 @@ name: Test Costco Price Checker
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   check-price:
     runs-on: ubuntu-latest
