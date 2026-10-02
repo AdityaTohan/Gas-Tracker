@@ -391,14 +391,15 @@ function drawChart(days) {
 
       scales: {
 
-        x: {
-
-          type: "time",
-
-          time: {
-            tooltipFormat: "MMM d, yyyy h:mm a"
+       x: {
+        type: "time",
+        time: {
+              unit: "day",
+              tooltipFormat: "MMM d, h:mm a",
+              displayFormats: {
+                  day: "MMM d"
+              }
           }
-
         },
 
         y: {
