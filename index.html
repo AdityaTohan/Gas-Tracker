@@ -510,30 +510,59 @@ function drawChart(days) {
 
       onClick: function(event, elements) {
 
-        if (!elements.length) {
-          return;
-        }
+  let selectedIndex = null;
 
-        /*
-          Both Regular and Premium points are at
-          the same timestamp.
+  // If the user clicks directly on a graph point
+  if (elements.length) {
 
-          So we use the x-axis index to determine
-          which price record was selected.
-        */
+    selectedIndex = elements[0].index;
 
-        const index = elements[0].index;
+  } else {
 
-        const selectedRecord =
-          currentFilteredPrices[index];
+    // If the user clicks on the x-axis/date area,
+    // find the closest date to where they clicked.
 
-        if (selectedRecord) {
+    const xScale = this.scales.x;
 
-          showSelectedDate(selectedRecord);
+    const clickedTime =
+      xScale.getValueForPixel(event.x);
 
-        }
+    if (clickedTime == null) {
+      return;
+    }
 
-      },
+    let closestIndex = 0;
+    let smallestDifference = Infinity;
+
+    currentFilteredPrices.forEach((price, index) => {
+
+      const priceTime =
+        new Date(price.checked_at).getTime();
+
+      const difference =
+        Math.abs(priceTime - clickedTime);
+
+      if (difference < smallestDifference) {
+
+        smallestDifference = difference;
+        closestIndex = index;
+
+      }
+
+    });
+
+    selectedIndex = closestIndex;
+
+  }
+
+  const selectedRecord =
+    currentFilteredPrices[selectedIndex];
+
+  if (selectedRecord) {
+    showSelectedDate(selectedRecord);
+  }
+
+},},
 
       plugins: {
 
