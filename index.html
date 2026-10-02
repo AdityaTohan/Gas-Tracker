@@ -425,9 +425,7 @@ function drawChart(days) {
   });
 
   const labels = currentFilteredPrices.map(price => {
-
     return new Date(price.checked_at);
-
   });
 
   const regular = currentFilteredPrices.map(price =>
@@ -442,6 +440,69 @@ function drawChart(days) {
 
   if (chart) {
     chart.destroy();
+  }
+
+  /*
+   * For 7D, calculate a tighter Y-axis range.
+   */
+  let yScaleOptions = {};
+
+  if (days === 7 && currentFilteredPrices.length > 0) {
+
+    const allValues = [
+      ...regular,
+      ...premium
+    ];
+
+    const minPrice = Math.min(...allValues);
+    const maxPrice = Math.max(...allValues);
+
+    // Add a small amount of padding around the actual prices
+    const padding = 0.005;
+
+    const yMin =
+      Math.floor((minPrice - padding) * 1000) / 1000;
+
+    const yMax =
+      Math.ceil((maxPrice + padding) * 1000) / 1000;
+
+    yScaleOptions = {
+
+      min: yMin,
+      max: yMax,
+
+      ticks: {
+
+        stepSize: 0.005,
+
+        callback: function(value) {
+
+          return "$" + Number(value).toFixed(3);
+
+        }
+
+      }
+
+    };
+
+  } else {
+
+    // Normal automatic scale for 30D, 3M and 1Y
+
+    yScaleOptions = {
+
+      ticks: {
+
+        callback: function(value) {
+
+          return "$" + Number(value).toFixed(3);
+
+        }
+
+      }
+
+    };
+
   }
 
   chart = new Chart(ctx, {
@@ -467,7 +528,9 @@ function drawChart(days) {
 
           pointRadius: 4,
 
-          pointHoverRadius: 7,
+          pointHoverRadius: 8,
+
+          pointHitRadius: 12,
 
           tension: 0.25
         },
@@ -485,7 +548,9 @@ function drawChart(days) {
 
           pointRadius: 4,
 
-          pointHoverRadius: 7,
+          pointHoverRadius: 8,
+
+          pointHitRadius: 12,
 
           tension: 0.25
         }
@@ -514,14 +579,6 @@ function drawChart(days) {
           return;
         }
 
-        /*
-          Both Regular and Premium points are at
-          the same timestamp.
-
-          So we use the x-axis index to determine
-          which price record was selected.
-        */
-
         const index = elements[0].index;
 
         const selectedRecord =
@@ -545,6 +602,12 @@ function drawChart(days) {
 
         tooltip: {
 
+          enabled: true,
+
+          mode: "index",
+
+          intersect: false,
+
           callbacks: {
 
             title: function(context) {
@@ -564,7 +627,10 @@ function drawChart(days) {
 
             label: function(context) {
 
-              return `${context.dataset.label}: $${context.parsed.y.toFixed(3)}/L`;
+              return (
+                `${context.dataset.label}: ` +
+                `$${Number(context.parsed.y).toFixed(3)}/L`
+              );
 
             }
 
@@ -582,7 +648,7 @@ function drawChart(days) {
 
           time: {
 
-            unit: "day",
+            unit: days === 7 ? "day" : "day",
 
             tooltipFormat: "MMM d, h:mm a",
 
@@ -596,19 +662,7 @@ function drawChart(days) {
 
         },
 
-        y: {
-
-          ticks: {
-
-            callback: function(value) {
-
-              return "$" + value.toFixed(3);
-
-            }
-
-          }
-
-        }
+        y: yScaleOptions
 
       }
 
@@ -617,7 +671,6 @@ function drawChart(days) {
   });
 
 }
-
 
 /* -----------------------------
    SHOW SELECTED DATE
