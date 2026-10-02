@@ -76,4 +76,4 @@ with open(FILE, "w", encoding="utf-8") as f:
 print(f"Saved price. Total records: {len(prices)}")
 print(f"Regular: ${regular:.3f}")
 print(f"Premium: ${premium:.3f}")
-```
+
