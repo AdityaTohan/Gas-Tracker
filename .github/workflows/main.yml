@@ -18,8 +18,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install playwright
-          playwright install --with-deps chromium
+          pip install requests
 
       - name: Check Costco price
         run: |
