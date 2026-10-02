@@ -29,8 +29,27 @@ price_data = {
     "checked_at": timestamp
 }
 
+# Save current price
 with open("prices.json", "w") as file:
     json.dump(price_data, file, indent=2)
+
+# Load existing history
+try:
+    with open("history.json", "r") as file:
+        history = json.load(file)
+except FileNotFoundError:
+    history = []
+
+# Add current price to history
+history.append({
+    "regular": regular,
+    "premium": premium,
+    "checked_at": timestamp
+})
+
+# Save history
+with open("history.json", "w") as file:
+    json.dump(history, file, indent=2)
 
 print(f"Regular: ${regular:.3f}/L")
 print(f"Premium: ${premium:.3f}/L")
