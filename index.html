@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Costco Gas Tracker</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f6f8;
+      color: #171717;
+    }
+
+    .container {
+      width: min(900px, 100%);
+      margin: auto;
+      padding: 24px 16px 40px;
+    }
+
+    header {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .location {
+      margin-top: 5px;
+      color: #666;
+      font-size: 15px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .label {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .unit {
+      font-size: 14px;
+      color: #777;
+      margin-left: 3px;
+    }
+
+    .updated {
+      margin-top: 8px;
+      color: #777;
+      font-size: 13px;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .chart-title {
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    .range-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .range-buttons button {
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 8px;
+      padding: 7px 11px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .range-buttons button.active {
+      background: #111;
+      color: white;
+      border-color: #111;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 360px;
+    }
+
+    .error {
+      background: #fff0f0;
+      color: #b00020;
+      padding: 15px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 18px 12px 30px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .cards {
+        gap: 10px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .price {
+        font-size: 26px;
+      }
+
+      .chart-card {
+        padding: 15px;
+      }
+
+      .chart-container {
+        height: 300px;
+      }
+
+      .range-buttons {
+        width: 100%;
+      }
+
+      .range-buttons button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>⛽ Costco Gas Tracker</h1>
+    <div class="location">Windsor, Ontario</div>
+  </header>
+
+  <div id="error" class="error"></div>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="label">Regular</div>
+      <div>
+        <span id="regularPrice" class="price">--</span>
+        <span class="unit">/ L</span>
+      </div>
+      <div id="regularUpdated" class="updated">
+        Loading...
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label">Premium</div>
+      <div>
+        <span id="premiumPrice" class="price">--</span>
+        <span class="unit">/ L</span>
+      </div>
+      <div id="premiumUpdated" class="updated">
+        Loading...
+      </div>
+    </div>
+
+  </div>
+
+  <div class="chart-card">
+
+    <div class="chart-header">
+
+      <div class="chart-title">
+        Price History
+      </div>
+
+      <div class="range-buttons">
+        <button data-days="7">7D</button>
+        <button data-days="30">30D</button>
+        <button data-days="90">3M</button>
+        <button data-days="365" class="active">1Y</button>
+      </div>
+
+    </div>
+
+    <div class="chart-container">
+      <canvas id="priceChart"></canvas>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+let allPrices = [];
+let chart = null;
+
+async function loadPrices() {
+
+  try {
+
+    const response = await fetch("prices.json?" + Date.now());
+
+    if (!response.ok) {
+      throw new Error("Could not load prices.json");
+    }
+
+    allPrices = await response.json();
+
+    if (!Array.isArray(allPrices) || allPrices.length === 0) {
+      throw new Error("prices.json does not contain price history.");
+    }
+
+    updateCurrentPrice();
+
+    drawChart(365);
+
+  } catch (error) {
+
+    console.error(error);
+
+    const errorBox = document.getElementById("error");
+
+    errorBox.textContent = error.message;
+    errorBox.style.display = "block";
+
+  }
+
+}
+
+
+function updateCurrentPrice() {
+
+  const latest = allPrices[allPrices.length - 1];
+
+  document.getElementById("regularPrice").textContent =
+    `$${Number(latest.regular).toFixed(3)}`;
+
+  document.getElementById("premiumPrice").textContent =
+    `$${Number(latest.premium).toFixed(3)}`;
+
+  const date = new Date(latest.checked_at);
+
+  const formattedDate = date.toLocaleString("en-CA", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+
+  document.getElementById("regularUpdated").textContent =
+    `Updated ${formattedDate}`;
+
+  document.getElementById("premiumUpdated").textContent =
+    `Updated ${formattedDate}`;
+
+}
+
+
+function drawChart(days) {
+
+  const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+
+  const filtered = allPrices.filter(price => {
+    return new Date(price.checked_at).getTime() >= cutoff;
+  });
+
+  const labels = filtered.map(price => {
+    return new Date(price.checked_at);
+  });
+
+  const regular = filtered.map(price => Number(price.regular));
+
+  const premium = filtered.map(price => Number(price.premium));
+
+  const ctx = document.getElementById("priceChart");
+
+  if (chart) {
+    chart.destroy();
+  }
+
+  chart = new Chart(ctx, {
+
+    type: "line",
+
+    data: {
+
+      labels: labels,
+
+      datasets: [
+
+        {
+          label: "Regular",
+          data: regular,
+          borderColor: "#2563eb",
+          backgroundColor: "rgba(37,99,235,0.08)",
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.25
+        },
+
+        {
+          label: "Premium",
+          data: premium,
+          borderColor: "#dc2626",
+          backgroundColor: "rgba(220,38,38,0.08)",
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.25
+        }
+
+      ]
+
+    },
+
+    options: {
+
+      responsive: true,
+
+      maintainAspectRatio: false,
+
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+
+      plugins: {
+
+        legend: {
+          display: true
+        },
+
+        tooltip: {
+
+          callbacks: {
+
+            label: function(context) {
+              return `${context.dataset.label}: $${context.parsed.y.toFixed(3)}/L`;
+            }
+
+          }
+
+        }
+
+      },
+
+      scales: {
+
+        x: {
+
+          type: "time",
+
+          time: {
+            tooltipFormat: "MMM d, yyyy h:mm a"
+          }
+
+        },
+
+        y: {
+
+          ticks: {
+
+            callback: function(value) {
+              return "$" + value.toFixed(3);
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  });
+
+}
+
+
+document.querySelectorAll(".range-buttons button").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    document.querySelectorAll(".range-buttons button")
+      .forEach(btn => btn.classList.remove("active"));
+
+    button.classList.add("active");
+
+    drawChart(Number(button.dataset.days));
+
+  });
+
+});
+
+
+loadPrices();
+
+</script>
+
+</body>
+</html>
