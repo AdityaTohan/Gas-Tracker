@@ -7,9 +7,8 @@
   <title>Costco Gas Tracker</title>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
 
   <style>
     * {
@@ -127,6 +126,61 @@
       height: 360px;
     }
 
+    /* Selected date information */
+
+    .selected-date {
+      margin-top: 18px;
+      padding: 16px;
+      background: #f7f7f8;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .selected-date-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .selected-date-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .selected-date-table th {
+      text-align: left;
+      color: #777;
+      font-weight: 500;
+      padding: 6px 4px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .selected-date-table td {
+      padding: 8px 4px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .selected-date-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .regular-value {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .premium-value {
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    .tap-hint {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #888;
+    }
+
     .error {
       background: #fff0f0;
       color: #b00020;
@@ -136,6 +190,7 @@
     }
 
     @media (max-width: 600px) {
+
       .container {
         padding: 18px 12px 30px;
       }
@@ -171,6 +226,11 @@
       .range-buttons button {
         flex: 1;
       }
+
+      .selected-date {
+        padding: 13px;
+      }
+
     }
   </style>
 </head>
@@ -190,10 +250,12 @@
 
     <div class="card">
       <div class="label">Regular</div>
+
       <div>
         <span id="regularPrice" class="price">--</span>
         <span class="unit">/ L</span>
       </div>
+
       <div id="regularUpdated" class="updated">
         Loading...
       </div>
@@ -201,10 +263,12 @@
 
     <div class="card">
       <div class="label">Premium</div>
+
       <div>
         <span id="premiumPrice" class="price">--</span>
         <span class="unit">/ L</span>
       </div>
+
       <div id="premiumUpdated" class="updated">
         Loading...
       </div>
@@ -221,16 +285,49 @@
       </div>
 
       <div class="range-buttons">
+
         <button data-days="7">7D</button>
+
         <button data-days="30">30D</button>
+
         <button data-days="90">3M</button>
+
         <button data-days="365" class="active">1Y</button>
+
       </div>
 
     </div>
 
     <div class="chart-container">
       <canvas id="priceChart"></canvas>
+    </div>
+
+    <!-- Selected date information -->
+
+    <div id="selectedDate" class="selected-date">
+
+      <div id="selectedDateTitle" class="selected-date-title">
+        Selected Date
+      </div>
+
+      <table class="selected-date-table">
+
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Regular</th>
+            <th>Premium</th>
+          </tr>
+        </thead>
+
+        <tbody id="selectedDateBody"></tbody>
+
+      </table>
+
+      <div class="tap-hint">
+        Tap another point on the graph to view that date.
+      </div>
+
     </div>
 
   </div>
@@ -241,6 +338,12 @@
 
 let allPrices = [];
 let chart = null;
+let currentFilteredPrices = [];
+
+
+/* -----------------------------
+   LOAD DATA
+----------------------------- */
 
 async function loadPrices() {
 
@@ -276,6 +379,10 @@ async function loadPrices() {
 }
 
 
+/* -----------------------------
+   CURRENT PRICE
+----------------------------- */
+
 function updateCurrentPrice() {
 
   const latest = allPrices[allPrices.length - 1];
@@ -302,21 +409,34 @@ function updateCurrentPrice() {
 }
 
 
+/* -----------------------------
+   DRAW CHART
+----------------------------- */
+
 function drawChart(days) {
 
-  const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+  const cutoff =
+    Date.now() - days * 24 * 60 * 60 * 1000;
 
-  const filtered = allPrices.filter(price => {
+  currentFilteredPrices = allPrices.filter(price => {
+
     return new Date(price.checked_at).getTime() >= cutoff;
+
   });
 
-  const labels = filtered.map(price => {
+  const labels = currentFilteredPrices.map(price => {
+
     return new Date(price.checked_at);
+
   });
 
-  const regular = filtered.map(price => Number(price.regular));
+  const regular = currentFilteredPrices.map(price =>
+    Number(price.regular)
+  );
 
-  const premium = filtered.map(price => Number(price.premium));
+  const premium = currentFilteredPrices.map(price =>
+    Number(price.premium)
+  );
 
   const ctx = document.getElementById("priceChart");
 
@@ -336,21 +456,37 @@ function drawChart(days) {
 
         {
           label: "Regular",
+
           data: regular,
+
           borderColor: "#2563eb",
+
           backgroundColor: "rgba(37,99,235,0.08)",
+
           borderWidth: 2,
-          pointRadius: 0,
+
+          pointRadius: 4,
+
+          pointHoverRadius: 7,
+
           tension: 0.25
         },
 
         {
           label: "Premium",
+
           data: premium,
+
           borderColor: "#dc2626",
+
           backgroundColor: "rgba(220,38,38,0.08)",
+
           borderWidth: 2,
-          pointRadius: 0,
+
+          pointRadius: 4,
+
+          pointHoverRadius: 7,
+
           tension: 0.25
         }
 
@@ -365,22 +501,71 @@ function drawChart(days) {
       maintainAspectRatio: false,
 
       interaction: {
+
         mode: "index",
+
         intersect: false
+
+      },
+
+      onClick: function(event, elements) {
+
+        if (!elements.length) {
+          return;
+        }
+
+        /*
+          Both Regular and Premium points are at
+          the same timestamp.
+
+          So we use the x-axis index to determine
+          which price record was selected.
+        */
+
+        const index = elements[0].index;
+
+        const selectedRecord =
+          currentFilteredPrices[index];
+
+        if (selectedRecord) {
+
+          showSelectedDate(selectedRecord);
+
+        }
+
       },
 
       plugins: {
 
         legend: {
+
           display: true
+
         },
 
         tooltip: {
 
           callbacks: {
 
+            title: function(context) {
+
+              const date =
+                new Date(context[0].parsed.x);
+
+              return date.toLocaleString("en-CA", {
+
+                dateStyle: "medium",
+
+                timeStyle: "short"
+
+              });
+
+            },
+
             label: function(context) {
+
               return `${context.dataset.label}: $${context.parsed.y.toFixed(3)}/L`;
+
             }
 
           }
@@ -391,15 +576,24 @@ function drawChart(days) {
 
       scales: {
 
-       x: {
-        type: "time",
-        time: {
-              unit: "day",
-              tooltipFormat: "MMM d, h:mm a",
-              displayFormats: {
-                  day: "MMM d"
-              }
+        x: {
+
+          type: "time",
+
+          time: {
+
+            unit: "day",
+
+            tooltipFormat: "MMM d, h:mm a",
+
+            displayFormats: {
+
+              day: "MMM d"
+
+            }
+
           }
+
         },
 
         y: {
@@ -407,7 +601,9 @@ function drawChart(days) {
           ticks: {
 
             callback: function(value) {
+
               return "$" + value.toFixed(3);
+
             }
 
           }
@@ -423,21 +619,149 @@ function drawChart(days) {
 }
 
 
-document.querySelectorAll(".range-buttons button").forEach(button => {
+/* -----------------------------
+   SHOW SELECTED DATE
+----------------------------- */
 
-  button.addEventListener("click", () => {
+function showSelectedDate(selectedRecord) {
 
-    document.querySelectorAll(".range-buttons button")
-      .forEach(btn => btn.classList.remove("active"));
+  /*
+    Convert selected timestamp into
+    a calendar date.
 
-    button.classList.add("active");
+    This lets us find every price check
+    that happened on that same day.
+  */
 
-    drawChart(Number(button.dataset.days));
+  const selectedDate =
+    new Date(selectedRecord.checked_at);
+
+  const year = selectedDate.getFullYear();
+
+  const month = selectedDate.getMonth();
+
+  const day = selectedDate.getDate();
+
+
+  const sameDay = allPrices.filter(price => {
+
+    const date = new Date(price.checked_at);
+
+    return (
+
+      date.getFullYear() === year &&
+
+      date.getMonth() === month &&
+
+      date.getDate() === day
+
+    );
 
   });
 
-});
 
+  const formattedDate =
+    selectedDate.toLocaleDateString("en-CA", {
+
+      year: "numeric",
+
+      month: "long",
+
+      day: "numeric"
+
+    });
+
+
+  document.getElementById("selectedDateTitle").textContent =
+    formattedDate;
+
+
+  const body =
+    document.getElementById("selectedDateBody");
+
+  body.innerHTML = "";
+
+
+  sameDay.forEach(price => {
+
+    const date =
+      new Date(price.checked_at);
+
+
+    const time =
+      date.toLocaleTimeString("en-CA", {
+
+        hour: "numeric",
+
+        minute: "2-digit"
+
+      });
+
+
+    const row =
+      document.createElement("tr");
+
+
+    row.innerHTML = `
+
+      <td>${time}</td>
+
+      <td class="regular-value">
+        $${Number(price.regular).toFixed(3)}
+      </td>
+
+      <td class="premium-value">
+        $${Number(price.premium).toFixed(3)}
+      </td>
+
+    `;
+
+
+    body.appendChild(row);
+
+  });
+
+
+  document.getElementById("selectedDate").style.display =
+    "block";
+
+}
+
+
+/* -----------------------------
+   RANGE BUTTONS
+----------------------------- */
+
+document.querySelectorAll(".range-buttons button")
+  .forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      document.querySelectorAll(".range-buttons button")
+        .forEach(btn =>
+          btn.classList.remove("active")
+        );
+
+      button.classList.add("active");
+
+      /*
+        Hide previously selected date
+        when changing the graph range.
+      */
+
+      document.getElementById("selectedDate").style.display =
+        "none";
+
+      drawChart(Number(button.dataset.days));
+
+    });
+
+  });
+
+
+/* -----------------------------
+   START
+----------------------------- */
 
 loadPrices();
 
