@@ -4,13 +4,195 @@
     "warehouse_id": 534,
     "regular": 1.699,
     "premium": 1.869,
-    "checked_at": "2026-10-02T03:24:34.383658+00:00"
+    "checked_at": "2025-10-05T08:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.679,
+    "premium": 1.849,
+    "checked_at": "2025-10-12T14:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.649,
+    "premium": 1.819,
+    "checked_at": "2025-10-20T20:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.689,
+    "premium": 1.859,
+    "checked_at": "2025-11-02T08:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.719,
+    "premium": 1.889,
+    "checked_at": "2025-11-15T14:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.739,
+    "premium": 1.909,
+    "checked_at": "2025-11-28T20:00:00+00:00"
   },
   {
     "warehouse": "Windsor",
     "warehouse_id": 534,
     "regular": 1.699,
     "premium": 1.869,
-    "checked_at": "2026-10-02T03:25:46.881758+00:00"
+    "checked_at": "2025-12-10T08:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.659,
+    "premium": 1.829,
+    "checked_at": "2025-12-22T14:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.629,
+    "premium": 1.799,
+    "checked_at": "2026-01-05T20:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.649,
+    "premium": 1.819,
+    "checked_at": "2026-01-18T08:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.679,
+    "premium": 1.849,
+    "checked_at": "2026-02-01T14:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.709,
+    "premium": 1.879,
+    "checked_at": "2026-02-14T20:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.749,
+    "premium": 1.919,
+    "checked_at": "2026-03-01T08:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.779,
+    "premium": 1.949,
+    "checked_at": "2026-03-15T14:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.819,
+    "premium": 1.989,
+    "checked_at": "2026-04-01T20:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.789,
+    "premium": 1.959,
+    "checked_at": "2026-04-15T08:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.759,
+    "premium": 1.929,
+    "checked_at": "2026-05-01T14:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.729,
+    "premium": 1.899,
+    "checked_at": "2026-05-15T20:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.699,
+    "premium": 1.869,
+    "checked_at": "2026-06-01T08:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.679,
+    "premium": 1.849,
+    "checked_at": "2026-06-15T14:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.719,
+    "premium": 1.889,
+    "checked_at": "2026-07-01T20:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.749,
+    "premium": 1.919,
+    "checked_at": "2026-07-15T08:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.729,
+    "premium": 1.899,
+    "checked_at": "2026-08-01T14:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.699,
+    "premium": 1.869,
+    "checked_at": "2026-08-15T20:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.679,
+    "premium": 1.849,
+    "checked_at": "2026-09-01T08:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.699,
+    "premium": 1.869,
+    "checked_at": "2026-09-15T14:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.679,
+    "premium": 1.849,
+    "checked_at": "2026-09-25T20:00:00+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.699,
+    "premium": 1.869,
+    "checked_at": "2026-10-01T08:00:00+00:00"
   }
 ]
