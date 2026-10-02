@@ -1,48 +1,31 @@
-import requests
-from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
 
 URL = "https://www.costco.ca/w/-/on/windsor/534"
 
-response = requests.get(
-    URL,
-    headers={
-        "User-Agent": "Mozilla/5.0"
-    },
-    timeout=30
-)
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True)
 
-response.raise_for_status()
+    page = browser.new_page(
+        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140 Safari/537.36"
+    )
 
-soup = BeautifulSoup(response.text, "html.parser")
+    print("Opening Costco...")
+    page.goto(URL, wait_until="domcontentloaded", timeout=60000)
 
-gas_section = soup.select_one(
-    '[data-testid="Text_warehouseetile-seewarehousedetails-gasprices"]'
-)
+    # Wait for Costco's warehouse details to appear
+    gas_section = page.locator(
+        '[data-testid="Text_warehousetile-seewarehousedetails-gasprices"]'
+    )
 
-if not gas_section:
-    print("❌ Gas price section not found")
-    exit(1)
+    gas_section.wait_for(state="visible", timeout=60000)
 
-print("✅ Gas price section found!")
+    print("✅ Gas Prices section found!")
 
-# Find the two price values following the "Gas Prices" element
-prices = []
+    # The price elements are inside the same warehouse details area.
+    # Get the text around the gas-price section's parent.
+    parent = gas_section.locator("xpath=..")
 
-for element in gas_section.find_all_next("span"):
-    text = element.get_text(strip=True)
+    print("Gas section text:")
+    print(parent.inner_text())
 
-    if text.startswith("$"):
-        prices.append(text)
-
-    if len(prices) == 2:
-        break
-
-if len(prices) < 2:
-    print("❌ Could not find both prices")
-    exit(1)
-
-regular = prices[0]
-premium = prices[1]
-
-print(f"Regular: {regular}/L")
-print(f"Premium: {premium}/L")
+    browser.close()
