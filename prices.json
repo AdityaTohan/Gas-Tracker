@@ -2,13 +2,6 @@
   {
     "warehouse": "Windsor",
     "warehouse_id": 534,
-    "regular": 1.649,
-    "premium": 1.819,
-    "checked_at": "2025-10-20T20:00:00+00:00"
-  },
-  {
-    "warehouse": "Windsor",
-    "warehouse_id": 534,
     "regular": 1.689,
     "premium": 1.859,
     "checked_at": "2025-11-02T08:00:00+00:00"
@@ -852,5 +845,12 @@
     "regular": 1.699,
     "premium": 1.869,
     "checked_at": "2026-10-20T18:12:20.188316+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.699,
+    "premium": 1.869,
+    "checked_at": "2026-10-20T21:57:37.163326+00:00"
   }
 ]
