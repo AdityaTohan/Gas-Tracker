@@ -12,8 +12,8 @@ from datetime import datetime, timedelta, timezone
 
 warehouse = "Windsor"
 warehouse_id = 534
-regular = 1.699
-premium = 1.869
+regular = regular
+premium = premimum
 
 # --------------------------------------------------
 # Save price history
