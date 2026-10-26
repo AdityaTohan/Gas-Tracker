@@ -1,17 +1,25 @@
+import requests
 import json
 import os
 from datetime import datetime, timedelta, timezone
 
 # --------------------------------------------------
-# Your existing Costco price-fetching code goes here
+# Fetch Costco Windsor gas prices
 # --------------------------------------------------
+URL = "https://www.costco.ca/AjaxGetGasPricesService?warehouseid=534"
 
-# Example:
-# Replace these values with the values returned by
-# your existing Costco price checker.
+response = requests.get(
+    URL,
+    headers={"User-Agent": "Mozilla/5.0"},
+    timeout=30
+)
+
+response.raise_for_status()
+data = response.json()
 
 warehouse = "Windsor"
 warehouse_id = 534
+
 regular = float(data["534"]["regular"])
 premium = float(data["534"]["premium"])
 
