@@ -1,0 +1,221 @@
+* {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f6f8;
+      color: #171717;
+    }
+
+    .container {
+      width: min(900px, 100%);
+      margin: auto;
+      padding: 24px 16px 40px;
+    }
+
+    header {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .location {
+      margin-top: 5px;
+      color: #666;
+      font-size: 15px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .label {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .unit {
+      font-size: 14px;
+      color: #777;
+      margin-left: 3px;
+    }
+
+    .updated {
+      margin-top: 8px;
+      color: #777;
+      font-size: 13px;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .chart-title {
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    .range-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .range-buttons button {
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 8px;
+      padding: 7px 11px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .range-buttons button.active {
+      background: #111;
+      color: white;
+      border-color: #111;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 360px;
+    }
+
+    /* Selected date information */
+
+    .selected-date {
+      margin-top: 18px;
+      padding: 16px;
+      background: #f7f7f8;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .selected-date-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .selected-date-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .selected-date-table th {
+      text-align: left;
+      color: #777;
+      font-weight: 500;
+      padding: 6px 4px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .selected-date-table td {
+      padding: 8px 4px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .selected-date-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .regular-value {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .premium-value {
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    .tap-hint {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .error {
+      background: #fff0f0;
+      color: #b00020;
+      padding: 15px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+
+      .container {
+        padding: 18px 12px 30px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .cards {
+        gap: 10px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .price {
+        font-size: 26px;
+      }
+
+      .chart-card {
+        padding: 15px;
+      }
+
+      .chart-container {
+        height: 300px;
+      }
+
+      .range-buttons {
+        width: 100%;
+      }
+
+      .range-buttons button {
+        flex: 1;
+      }
+
+      .selected-date {
+        padding: 13px;
+      }
+
+    }
