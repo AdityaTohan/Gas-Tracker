@@ -10,18 +10,25 @@
   <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
+  window.OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "ec2005ea-ef6a-485c-bfc2-294d646800e1",
       safari_web_id: "web.onesignal.auto.3f58661c-f8ad-4946-a9b6-84125eec4421",
-      notifyButton: {
-        enable: true,
+      serviceWorkerPath: "/Gas-Tracker/OneSignalSDKWorker.js",
+      serviceWorkerParam: {
+        scope: "/Gas-Tracker/"
       },
+      notifyButton: {
+        enable: true
+      }
     });
   });
 </script>
+
 </head>
 
 <body>
