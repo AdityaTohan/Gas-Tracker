@@ -5,5 +5,47 @@
     "regular": 1.679,
     "premium": 1.849,
     "checked_at": "2026-10-26T14:01:24.463956+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.679,
+    "premium": 1.849,
+    "checked_at": "2026-10-26T17:43:07.845564+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.629,
+    "premium": 1.799,
+    "checked_at": "2026-10-26T21:58:03.516730+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.629,
+    "premium": 1.799,
+    "checked_at": "2026-10-27T01:03:14.424977+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.669,
+    "premium": 1.899,
+    "checked_at": "2026-10-27T06:54:14.189245+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.639,
+    "premium": 1.889,
+    "checked_at": "2026-10-27T12:48:11.171928+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.599,
+    "premium": 1.799,
+    "checked_at": "2026-10-27T18:25:03.877238+00:00"
   }
 ]
