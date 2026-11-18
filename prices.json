@@ -460,5 +460,12 @@
     "regular": 1.379,
     "premium": 1.579,
     "checked_at": "2026-11-18T09:28:01.639051+00:00"
+  },
+  {
+    "warehouse": "Windsor",
+    "warehouse_id": 534,
+    "regular": 1.379,
+    "premium": 1.579,
+    "checked_at": "2026-11-18T18:30:03.557198+00:00"
   }
 ]
